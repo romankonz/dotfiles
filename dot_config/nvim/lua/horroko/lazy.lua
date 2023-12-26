@@ -18,7 +18,6 @@ require("lazy").setup({
         config = function()
             require("tokyonight").setup({
                 transparent = true,
-                vim.cmd.colorscheme('tokyonight')
             })
         end
 
@@ -66,5 +65,19 @@ require("lazy").setup({
                 indent = { enable = true },
             })
         end
-    }
+    },
+    {
+        "nvim-tree/nvim-tree.lua",
+        version = "*",
+        lazy = false,
+        dependencies = {
+            "nvim-tree/nvim-web-devicons",
+        },
+        config = function()
+            require("nvim-tree").setup {}
+        end
+    },
 })
+
+vim.cmd.colorscheme('tokyonight')
+vim.cmd [[hi NvimTreeNormal guibg=NONE ctermbg=NONE]]

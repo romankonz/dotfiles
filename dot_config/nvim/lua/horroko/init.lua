@@ -1,6 +1,6 @@
+require('horroko.opts')
 require('horroko.lazy')
 require('horroko.lsp')
-require('horroko.opts')
 require('horroko.mapping')
 require('horroko.filetype')
 require('horroko/keybinding')
