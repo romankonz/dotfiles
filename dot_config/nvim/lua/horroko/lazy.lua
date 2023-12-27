@@ -77,6 +77,13 @@ require("lazy").setup({
             require("nvim-tree").setup {}
         end
     },
+    {
+        "ThePrimeagen/harpoon",
+        branch = "harpoon2",
+        dependencies = {
+            { "nvim-lua/plenary.nvim" }
+        }
+    }
 })
 
 vim.cmd.colorscheme('tokyonight')
