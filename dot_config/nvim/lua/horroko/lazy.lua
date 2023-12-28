@@ -66,6 +66,7 @@ require("lazy").setup({
             })
         end
     },
+    { "nvim-treesitter/nvim-treesitter-context" },
     {
         "nvim-tree/nvim-tree.lua",
         version = "*",
@@ -83,7 +84,8 @@ require("lazy").setup({
         dependencies = {
             { "nvim-lua/plenary.nvim" }
         }
-    }
+    },
+    { 'tpope/vim-fugitive' },
 })
 
 vim.cmd.colorscheme('tokyonight')
