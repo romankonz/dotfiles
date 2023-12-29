@@ -1,7 +1,0 @@
-require('horroko.opts')
-require('horroko.lazy')
-require('horroko.lsp')
-require('horroko.mapping')
-require('horroko.filetype')
-require('horroko/keybinding')
-require('horroko.harpoon')
