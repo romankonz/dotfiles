@@ -1,5 +1,3 @@
-vim.g.mapleader = ' '
-
 local builtin = require('telescope.builtin')
 
 vim.keymap.set('n', '<leader>ff', builtin.find_files, {})
@@ -14,10 +12,12 @@ vim.keymap.set('n', '<leader>fd', builtin.lsp_definitions, {})
 vim.keymap.set('n', '<leader>ft', builtin.lsp_type_definitions, {})
 vim.keymap.set('n', '<leader>fm', builtin.lsp_implementations, {})
 vim.keymap.set('n', '<leader>fu', builtin.git_stash, {})
+vim.keymap.set('n', '<leader>fo', ':ObsidianSearch<CR>', {})
+vim.keymap.set('n', '<leader>fv', builtin.registers, {})
 
 vim.keymap.set('n', '<leader>rr', vim.lsp.buf.rename, {})
 vim.keymap.set('n', '<leader>rf', vim.lsp.buf.format, {})
-vim.keymap.set('n', '<leader>ra', vim.lsp.buf.code_action, {})
+vim.keymap.set({'v', 'n'}, '<leader>ra', vim.lsp.buf.code_action, {})
 
 vim.keymap.set('n', '<leader>ee', ':NvimTreeToggle<CR>', {})
 vim.keymap.set('n', '<leader>es', ':NvimTreeFindFile<CR>', {})
@@ -29,3 +29,7 @@ vim.keymap.set('n', '<leader>gc', function() vim.cmd.Git('commit') end, {})
 vim.keymap.set('n', '<leader>gd', function() vim.cmd.Git('diff') end, {})
 vim.keymap.set('n', '<leader>gb', function() vim.cmd.Git('blame') end, {})
 vim.keymap.set('n', '<leader>gg', function() vim.cmd.Git() end, {})
+
+vim.keymap.set('n', '<leader>oo', ':ObsidianOpen<CR>', {})
+
+vim.keymap.set('n', '<leader>tt', ':TableModeToggle<CR>', {})

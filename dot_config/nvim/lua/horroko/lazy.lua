@@ -86,6 +86,22 @@ require("lazy").setup({
         }
     },
     { 'tpope/vim-fugitive' },
+    { 'dhruvasagar/vim-table-mode' },
+    {
+        "epwalsh/obsidian.nvim",
+        lazy = false,
+        dependencies = {
+            { "nvim-lua/plenary.nvim" }
+        },
+        opts = {
+            workspaces = {
+                {
+                    name = 'horroko',
+                    path = '/Users/rk/Library/Mobile Documents/iCloud~md~obsidian/Documents/Horroko/',
+                },
+            },
+        },
+    },
 })
 
 vim.cmd.colorscheme('tokyonight')

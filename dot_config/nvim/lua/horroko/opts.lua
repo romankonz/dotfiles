@@ -1,3 +1,5 @@
+vim.g.mapleader = ' '
+
 vim.g.loaded_netrw = 1
 vim.g.loaded_netrwPlugin = 1
 
@@ -13,3 +15,4 @@ vim.opt.expandtab = true
 
 vim.opt.smartindent = true
 
+vim.g.table_mode_corner = '|'
