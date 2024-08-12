@@ -21,8 +21,6 @@ require('lazy').setup({
   { 'tpope/vim-fugitive' },
   { 'tpope/vim-sleuth' },
   { "github/copilot.vim" },
-  { "luckasRanarison/tree-sitter-hyprlang" },
-  { 'fladson/vim-kitty' },
   {
     'folke/tokyonight.nvim',
     style = 'day',
@@ -54,7 +52,12 @@ require('lazy').setup({
       'rafamadriz/friendly-snippets',
     },
   },
-  { 'folke/which-key.nvim',    opts = {} },
+  { 'folke/which-key.nvim',
+    opts = {},
+    dependencies = {
+      { 'echasnovski/mini.nvim', version = false }
+    }
+  },
   { 'lewis6991/gitsigns.nvim', opts = {} },
   {
     'nvim-lualine/lualine.nvim',
@@ -78,27 +81,23 @@ require('lazy').setup({
   },
   { 'dhruvasagar/vim-table-mode' },
   {
-    "epwalsh/obsidian.nvim",
-    lazy = false,
-    dependencies = {
-      { "nvim-lua/plenary.nvim" }
-    },
-    opts = {
-      workspaces = {
-        --{
-        --  name = 'horroko',
-        --  path = '/Users/rk/Library/Mobile Documents/iCloud~md~obsidian/Documents/Horroko/',
-        --},
-      },
-    },
-  },
-  {
     "ThePrimeagen/harpoon",
     branch = "harpoon2",
     dependencies = {
       { "nvim-lua/plenary.nvim" }
     }
   },
+  {
+    "nvim-tree/nvim-tree.lua",
+    version = "*",
+    lazy = false,
+    dependencies = {
+      "nvim-tree/nvim-web-devicons",
+    },
+    config = function()
+      require("nvim-tree").setup {}
+    end,
+  }
 })
 
 -- vim options
@@ -107,8 +106,6 @@ vim.o.hlsearch = false
 
 vim.wo.number = true
 vim.wo.relativenumber = true
-
-vim.o.mouse = true
 
 vim.opt.tabstop = 4
 vim.opt.softtabstop = 4
@@ -169,29 +166,26 @@ pcall(require('telescope').load_extension, 'fzf')
 
 local builtin = require('telescope.builtin')
 
-vim.keymap.set('n', '<leader>ff', builtin.find_files, {})
-vim.keymap.set('n', '<leader>fi', builtin.live_grep, {})
-vim.keymap.set('n', '<leader>fg', builtin.git_files, {})
-vim.keymap.set('n', '<leader>fb', builtin.buffers, {})
-vim.keymap.set('n', '<leader>fh', builtin.help_tags, {})
-vim.keymap.set('n', '<leader>fu', builtin.git_stash, {})
-vim.keymap.set('n', '<leader>fo', ':ObsidianSearch<CR>', {})
-vim.keymap.set('n', '<leader>fv', builtin.registers, {})
+vim.keymap.set('n', '<leader>ff', builtin.find_files, { desc = '[f]ind [f]ile'})
+vim.keymap.set('n', '<leader>fi', builtin.live_grep, { desc = '[f]ind [i]n files' })
+vim.keymap.set('n', '<leader>fg', builtin.git_files, { desc = '[f]ind [g]it files' })
+vim.keymap.set('n', '<leader>fb', builtin.buffers, { desc = '[f]ind [b]uffer' })
+vim.keymap.set('n', '<leader>fh', builtin.help_tags, { desc = '[f]ind [h]elp' })
+vim.keymap.set('n', '<leader>fu', builtin.git_stash, { desc = '[f]ind ([u]n)stash' })
+vim.keymap.set('n', '<leader>fv', builtin.registers, { desc = '[f]ind [v] registers' })
 
-vim.keymap.set('n', '<leader>ee', ':NvimTreeToggle<CR>', {})
-vim.keymap.set('n', '<leader>es', ':NvimTreeFindFile<CR>', {})
+vim.keymap.set('n', '<leader>ee', ':NvimTreeToggle<CR>', { desc = '[e]xplorer [e]xpand'})
+vim.keymap.set('n', '<leader>es', ':NvimTreeFindFile<CR>', { desc = '[e]xplorer [s]earch'})
 
-vim.keymap.set('n', '<leader>gl', function() vim.cmd.Git('pull') end, {})
-vim.keymap.set('n', '<leader>gp', function() vim.cmd.Git('push') end, {})
-vim.keymap.set('n', '<leader>gs', function() vim.cmd.Git('status') end, {})
-vim.keymap.set('n', '<leader>gc', function() vim.cmd.Git('commit') end, {})
-vim.keymap.set('n', '<leader>gd', function() vim.cmd.Git('diff') end, {})
-vim.keymap.set('n', '<leader>gb', function() vim.cmd.Git('blame') end, {})
-vim.keymap.set('n', '<leader>gg', function() vim.cmd.Git() end, {})
+vim.keymap.set('n', '<leader>gl', function() vim.cmd.Git('pull') end, { desc = '[g]it pu[l]l' })
+vim.keymap.set('n', '<leader>gp', function() vim.cmd.Git('push') end, { desc = '[g]it [p]ush' })
+vim.keymap.set('n', '<leader>gs', function() vim.cmd.Git('status') end, { desc = '[g]it [s]tatus'})
+vim.keymap.set('n', '<leader>gc', function() vim.cmd.Git('commit') end, { desc = '[g]it [c]ommit'})
+vim.keymap.set('n', '<leader>gd', function() vim.cmd.Git('diff') end, { desc = '[g]it [d]iff'})
+vim.keymap.set('n', '<leader>gb', function() vim.cmd.Git('blame') end, { desc = '[g]it [b]lame'})
+vim.keymap.set('n', '<leader>gg', function() vim.cmd.Git() end, { desc = '[g]it [g]it'})
 
-vim.keymap.set('n', '<leader>oo', ':ObsidianOpen<CR>', {})
-
-vim.keymap.set('n', '<leader>tt', ':TableModeToggle<CR>', {})
+vim.keymap.set('n', '<leader>tt', ':TableModeToggle<CR>', { desc = '[t]able [t]oggle' })
 
 -- treesitter
 
@@ -215,32 +209,27 @@ end, 0)
 
 -- LSP
 local on_attach = function(_, _)
-  vim.keymap.set('n', 'K', '<cmd>lua vim.lsp.buf.hover()<cr>')
-  vim.keymap.set('n', 'gd', '<cmd>lua vim.lsp.buf.definition()<cr>')
-  vim.keymap.set('n', 'gD', '<cmd>lua vim.lsp.buf.declaration()<cr>')
-  vim.keymap.set('n', 'gi', '<cmd>lua vim.lsp.buf.implementation()<cr>')
-  vim.keymap.set('n', 'go', '<cmd>lua vim.lsp.buf.type_definition()<cr>')
-  vim.keymap.set('n', 'gr', '<cmd>lua vim.lsp.buf.references()<cr>')
-  vim.keymap.set('n', 'gs', '<cmd>lua vim.lsp.buf.signature_help()<cr>')
-  vim.keymap.set('n', '<F2>', '<cmd>lua vim.lsp.buf.rename()<cr>')
-  vim.keymap.set({ 'n', 'x' }, '<F3>', '<cmd>lua vim.lsp.buf.format({async = true})<cr>')
-  vim.keymap.set('n', '<F4>', '<cmd>lua vim.lsp.buf.code_action()<cr>')
+  vim.keymap.set('n', 'K', '<cmd>lua vim.lsp.buf.hover()<cr>', { desc = 'show [K]ind' })
+  vim.keymap.set('n', 'gd', '<cmd>lua vim.lsp.buf.definition()<cr>', { desc = '[g]oto [d]efinition' })
+  vim.keymap.set('n', 'gD', '<cmd>lua vim.lsp.buf.declaration()<cr>', { desc = '[g]oto [D]eclaration' })
+  vim.keymap.set('n', 'gi', '<cmd>lua vim.lsp.buf.implementation()<cr>', { desc = '[g]oto [i]mplementation' })
+  vim.keymap.set('n', 'go', '<cmd>lua vim.lsp.buf.type_definition()<cr>', { desc = '[g]oto [o]bject' })
+  vim.keymap.set('n', 'gr', '<cmd>lua vim.lsp.buf.references()<cr>', { desc = '[g]oto [r]eferences' })
+  vim.keymap.set('n', 'gs', '<cmd>lua vim.lsp.buf.signature_help()<cr>', { desc = '[g]oto [s]ignature' })
+  vim.keymap.set('n', '<F2>', '<cmd>lua vim.lsp.buf.rename()<cr>', { desc = 'rename buffer' })
+  vim.keymap.set({ 'n', 'x' }, '<F3>', '<cmd>lua vim.lsp.buf.format({async = true})<cr>', { desc = 'format buffer' })
+  vim.keymap.set('n', '<F4>', '<cmd>lua vim.lsp.buf.code_action()<cr>', { desc = 'code action' })
 
-  vim.keymap.set('n', '<leader>fs', builtin.lsp_document_symbols, {})
-  vim.keymap.set('n', '<leader>fw', builtin.lsp_dynamic_workspace_symbols, {})
-  vim.keymap.set('n', '<leader>fr', builtin.lsp_references, {})
-  vim.keymap.set('n', '<leader>fd', builtin.lsp_definitions, {})
-  vim.keymap.set('n', '<leader>ft', builtin.lsp_type_definitions, {})
-  vim.keymap.set('n', '<leader>fm', builtin.lsp_implementations, {})
-  vim.keymap.set('n', '<leader>rr', vim.lsp.buf.rename, {})
-  vim.keymap.set('n', '<leader>rf', vim.lsp.buf.format, {})
-  vim.keymap.set({ 'v', 'n' }, '<leader>ra', vim.lsp.buf.code_action, {})
+  vim.keymap.set('n', '<leader>fs', builtin.lsp_document_symbols, { desc = '[f]ind [s]ymbols'})
+  vim.keymap.set('n', '<leader>fw', builtin.lsp_dynamic_workspace_symbols, { desc = '[f]ind [w]orkspace symbols'})
+  vim.keymap.set('n', '<leader>fr', builtin.lsp_references, { desc = '[f]ind [r]eferences'})
+  vim.keymap.set('n', '<leader>fd', builtin.lsp_definitions, { desc = '[f]ind [d]efinitions'})
+  vim.keymap.set('n', '<leader>ft', builtin.lsp_type_definitions, { desc = '[f]ind [t]ype definitions'})
+  vim.keymap.set('n', '<leader>fm', builtin.lsp_implementations, { desc = '[f]ind i[m]plementations'})
+  vim.keymap.set('n', '<leader>rr', vim.lsp.buf.rename, { desc = '[r]efactor [r]ename'})
+  vim.keymap.set('n', '<leader>rf', vim.lsp.buf.format, { desc = '[r]efactor [f]ormat'})
+  vim.keymap.set({ 'v', 'n' }, '<leader>ra', vim.lsp.buf.code_action, { desc = '[r]efactor [a]ction'})
 end
-
-require('which-key').register({
-  ['<leader>'] = { name = 'VISUAL <leader>' },
-  ['<leader>h'] = { 'Git [H]unk' },
-}, { mode = 'v' })
 
 require('mason').setup()
 require('mason-lspconfig').setup()
@@ -321,13 +310,13 @@ harpoon:setup(_, _)
 -- REQUIRED
 
 vim.keymap.set("n", "<leader>ha", function() harpoon:list():append() end, { desc = "[h]arpoon [a]dd" })
-vim.keymap.set("n", "<leader>hh", function() harpoon.ui:toggle_quick_menu(harpoon:list()) end)
+vim.keymap.set("n", "<leader>hh", function() harpoon.ui:toggle_quick_menu(harpoon:list()) end, { desc = "[h]arpoon [h]ome" })
 
-vim.keymap.set("n", "<leader>h1", function() harpoon:list():select(1) end)
-vim.keymap.set("n", "<leader>h2", function() harpoon:list():select(2) end)
-vim.keymap.set("n", "<leader>h3", function() harpoon:list():select(3) end)
-vim.keymap.set("n", "<leader>h5", function() harpoon:list():select(4) end)
+vim.keymap.set("n", "<leader>h1", function() harpoon:list():select(1) end, { desc = "[h]arpoon [1]" })
+vim.keymap.set("n", "<leader>h2", function() harpoon:list():select(2) end, { desc = "[h]arpoon [2]" })
+vim.keymap.set("n", "<leader>h3", function() harpoon:list():select(3) end, { desc = "[h]arpoon [3]" })
+vim.keymap.set("n", "<leader>h5", function() harpoon:list():select(4) end, { desc = "[h]arpoon [4]" })
 
 -- Toggle previous & next buffers stored within Harpoon list
-vim.keymap.set("n", "<leader>hp", function() harpoon:list():prev() end)
-vim.keymap.set("n", "<leader>hn", function() harpoon:list():next() end)
+vim.keymap.set("n", "<leader>hp", function() harpoon:list():prev() end, { desc = "[h]arpoon [p]revious" })
+vim.keymap.set("n", "<leader>hn", function() harpoon:list():next() end, { desc = "[h]arpoon [n]ext" })
